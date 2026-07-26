@@ -16,6 +16,7 @@ class PengumpulanTugas extends Model
         'user_id',
         'kelompok_id',
         'file_path',
+        'link_drive',
         'keterangan',
         'status',
         'nilai',

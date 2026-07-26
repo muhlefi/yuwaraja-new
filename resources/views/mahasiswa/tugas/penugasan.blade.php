@@ -229,15 +229,15 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg><span>{{ session('error') }}</span></div> @endif
 
-                    @if(isset($pengumpulan) && $pengumpulan->file_path)
+                    @if(isset($pengumpulan) && $pengumpulan->link_drive)
                     <div class="bg-gray-800/80 p-4 rounded-lg border border-teal-500/20 mb-4">
                         <p class="text-sm font-semibold text-teal-400 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                             </svg>
-                            File Terkumpul
+                            Link Drive Terkumpul
                         </p>
-                        <a href="{{ route('mahasiswa.pengumpulan.download', $pengumpulan) }}" class="text-amber-400 hover:text-amber-300 hover:underline text-sm truncate block mt-1 ml-7">{{ basename($pengumpulan->file_path) }}</a>
+                        <a href="{{ $pengumpulan->link_drive }}" target="_blank" class="text-amber-400 hover:text-amber-300 hoverunderline text-sm truncate block mt-1 ml-7">{{ $pengumpulan->link_drive }}</a>
 
                         <!-- Status pengumpulan -->
                         <div class="mt-3 pt-3 border-t border-gray-600/50">
@@ -265,26 +265,37 @@
                     @endif
 
                     @if(now() <= $tugas->deadline && (!isset($pengumpulan) || $pengumpulan->status !== 'done'))
-                        <form action="{{ route('mahasiswa.tugas.submit', $tugas) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                        <form action="{{ route('mahasiswa.tugas.submit', $tugas) }}" method="POST" class="space-y-4">
                             @csrf
+                            @if(isset($pengumpulan->kelompok->link_drive) && $pengumpulan->kelompok->link_drive)
+                            <div class="bg-gray-800/60 p-3 rounded-lg border border-cyan-500/20">
+                                <p class="text-xs text-gray-400 mb-1">Link Drive Cluster (untuk upload file tugas):</p>
+                                <a href="{{ $pengumpulan->kelompok->link_drive }}" target="_blank" class="text-sm text-cyan-400 hover:text-cyan-300 hover:underline break-all">{{ $pengumpulan->kelompok->link_drive }}</a>
+                            </div>
+                            @endif
                             <div>
-                                <label for="file" class="block text-sm font-semibold text-gray-300 mb-1">Upload File (opsional) <span class="text-red-400">*</span></label>
-                                <input type="file" id="file" name="file" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-teal-500/10 file:text-white hover:file:bg-teal-500/20 transition-colors cursor-pointer" accept=".pdf,.doc,.docx,.zip,.rar">
-                                <p class="mt-1 text-xs text-gray-500">Maks: 10MB (PDF, DOC, ZIP, RAR)</p>
-                                @error('file') <p class="text-sm text-red-400 mt-1">{{ $message }}</p> @enderror
+                                <label for="link_drive" class="block text-sm font-semibold text-gray-300 mb-1">Link Drive Pengumpulan <span class="text-red-400">*</span></label>
+                                <input type="url" id="link_drive" name="link_drive" value="{{ old('link_drive', $pengumpulan->link_drive ?? '') }}" required
+                                    class="block w-full border border-gray-700 bg-gray-800 text-white rounded-lg p-2.5 focus:ring-1 focus:ring-teal-400 focus:border-teal-400 transition text-sm" 
+                                    placeholder="https://drive.google.com/...">
+                                <p class="mt-1 text-xs text-gray-500">Paste link Google Drive file tugas kamu</p>
+                                @error('link_drive') <p class="text-sm text-red-400 mt-1">{{ $message }}</p> @enderror
                             </div>
                             <div>
                                 <label for="keterangan" class="block text-sm font-semibold text-gray-300 mb-1">Keterangan (Opsional)</label>
                                 <textarea id="keterangan" name="keterangan" rows="3" class="block w-full border border-gray-700 bg-gray-800 text-white rounded-lg p-2 focus:ring-1 focus:ring-teal-400 focus:border-teal-400 transition" placeholder="Tinggalkan catatan jika perlu...">{{ old('keterangan', $pengumpulan->keterangan ?? '') }}</textarea>
                                 @error('keterangan') <p class="text-sm text-red-400 mt-1">{{ $message }}</p> @enderror
                             </div>
-                            <button type="submit" class="w-full px-6 py-3 bg-teal-500 hover:bg-teal-600 text-black font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 font-display focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-teal-400">
+                            <button type="submit" class="w-full px-6 py-3 bg-teal-500 hover:bg-teal-600 text-black font-bold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 font-display focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-teal-400 flex items-center justify-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
                                 @if(isset($pengumpulan) && $pengumpulan->status == 'rejected')
                                 Kumpulkan Ulang (Perbaikan)
-                                @elseif(isset($pengumpulan) && $pengumpulan->file_path)
-                                Kirim Versi Baru
+                                @elseif(isset($pengumpulan) && $pengumpulan->link_drive)
+                                Update Link Drive
                                 @else
-                                Kirim Misi
+                                Tandai Selesai
                                 @endif
                             </button>
                         </form>

@@ -50,7 +50,7 @@ class MahasiswaTugasController extends Controller
     public function submit(Request $request, Tugas $tugas)
     {
         $request->validate([
-            'file' => 'nullable|file|mimes:pdf,doc,docx,zip,rar|max:10240', // Max 10MB
+            'link_drive' => 'required|url|max:500',
             'keterangan' => 'nullable|string|max:2000',
         ]);
 
@@ -71,17 +71,9 @@ class MahasiswaTugasController extends Controller
                 ->with('error', 'Tugas ini sudah selesai dan dinilai. Anda tidak dapat mengumpulkan lagi.');
         }
 
-        if ($request->hasFile('file')) {
-            // Hapus file lama jika ada
-            if ($pengumpulan->file_path) {
-                Storage::disk('public')->delete($pengumpulan->file_path);
-            }
-            $filePath = $request->file('file')->store('pengumpulan', 'public');
-            $pengumpulan->file_path = $filePath;
-        }
-
+        $pengumpulan->link_drive = $request->link_drive;
         $pengumpulan->keterangan = $request->keterangan;
-        $pengumpulan->status = 'submitted'; // Reset status ke submitted untuk review ulang
+        $pengumpulan->status = 'submitted';
         $pengumpulan->submitted_at = now();
         
         // Pastikan kelompok_id tersimpan
