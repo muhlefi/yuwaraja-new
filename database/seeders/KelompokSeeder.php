@@ -17,6 +17,7 @@ class KelompokSeeder extends Seeder
                 'spv_id' => 2,
                 'code' => 'ALPHA',
                 'photo' => null,
+                'link_drive' => 'https://drive.google.com/drive/folders/1AlphaCluster',
             ],
             [
                 'id' => 2,
@@ -24,6 +25,7 @@ class KelompokSeeder extends Seeder
                 'spv_id' => 3,
                 'code' => 'BRAVO',
                 'photo' => null,
+                'link_drive' => 'https://drive.google.com/drive/folders/1BravoCluster',
             ],
             [
                 'id' => 3,
@@ -31,6 +33,7 @@ class KelompokSeeder extends Seeder
                 'spv_id' => 4,
                 'code' => 'CHARL',
                 'photo' => null,
+                'link_drive' => 'https://drive.google.com/drive/folders/1CharlieCluster',
             ],
         ];
 
