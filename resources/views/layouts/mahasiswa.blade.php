@@ -8,9 +8,7 @@
     <title>{{ config('app.name', 'YUWARAJAXVII') }} - Mahasiswa Dashboard</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo-yuwarajaxvii.svg') }}">
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/logo-yuwarajaxvii.svg') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='14' fill='gray'>[logo]</text></svg>">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
     <!-- Fonts -->

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.spv')
 
 @section('content')
 <style>
@@ -101,7 +101,7 @@
                         @endif
                     </a>
                     <div class="text-left">
-                        <p class="font-semibold text-white capitalize leading-tight">Admin YUWARAJA XVII</p>
+                        <p class="font-semibold text-white capitalize leading-tight">Supervisor YUWARAJA XVII</p>
                         <p class="text-sm text-gray-400 leading-tight">{{ $user->email ?? 'N/A' }}</p>
                         <a href="{{ route('profile.edit') }}" class="text-xs text-gray-400 hover:text-amber-400 transition-colors mt-1 inline-block">
                             Edit Profil »

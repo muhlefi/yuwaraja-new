@@ -12,7 +12,7 @@ return [
 
     'upload' => [
         'path' => 'profile-pictures',
-        'max_size' => 10 * 1024 * 1024, // 10MB
+        'max_size' => 5 * 1024 * 1024, // 5MB
         'allowed_extensions' => ['jpg', 'jpeg', 'png', 'gif', 'webp'],
         'allowed_mime_types' => [
             'image/jpeg',

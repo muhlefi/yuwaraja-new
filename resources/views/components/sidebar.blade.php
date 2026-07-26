@@ -29,7 +29,7 @@
 
         <!-- Logo & Title -->
         <a href="{{route('dashboard')}}" class="flex flex-col items-center justify-center h-36 px-4 bg-black/30 border-b border-cyan-400/20">
-            <img src="{{ asset('images/logo.svg') }}" alt="Logo" class="h-16 mb-2">
+            <div class="h-16 mb-2 flex items-center justify-center text-cyan-400 font-bold text-2xl">[logo]</div>
             <h1 class="text-lg font-bold text-white font-orbitron">YUWARAJA XVII</h1>
         </a>
 

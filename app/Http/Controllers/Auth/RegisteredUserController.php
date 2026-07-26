@@ -76,7 +76,7 @@ class RegisteredUserController extends Controller
             ],
             'agama' => ['nullable', 'string', 'in:Islam,Kristen,Katolik,Hindu,Buddha,Konghucu,Kepercayaan'],
             'program_studi' => ['required', 'string', 'max:255'],
-            'angkatan' => ['required', 'string', 'in:2023,2024,2025'],
+            'angkatan' => ['required', 'string', 'in:2023,2024,2025,2026'],
             'nomor_telepon' => ['required', 'string', 'max:255'], // Tambahan 'required'
             'tempat_lahir' => ['nullable', 'string', 'max:255'], // Made nullable to match database
             'tanggal_lahir' => ['nullable', 'date'], // Made nullable to match database
@@ -107,7 +107,7 @@ class RegisteredUserController extends Controller
             'email_student.email' => 'Format email student tidak valid.',
             'program_studi.required' => 'Program studi wajib dipilih!',
             'angkatan.required' => 'Angkatan wajib diisi!',
-            'angkatan.in' => 'Angkatan hanya boleh 2023, 2024, atau 2025.',
+            'angkatan.in' => 'Angkatan hanya boleh 2023, 2024, 2025, atau 2026.',
             'nomor_telepon.required' => 'Nomor WhatsApp wajib diisi!',
             'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih!',
             'kota.in' => 'Pilihan hanya boleh Kota atau Kabupaten.',

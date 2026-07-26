@@ -13,7 +13,7 @@ class AbsensiSeeder extends Seeder
         // Sesi absensi 1: Hari ini, Upacara Pembukaan (sudah berlangsung)
         $absensi1 = Absensi::create([
             'judul' => 'Absensi Upacara Pembukaan',
-            'deskripsi' => 'Absensi untuk kegiatan Upacara Pembukaan PPKMB YUWARAJA 2025',
+            'deskripsi' => 'Absensi untuk kegiatan Upacara Pembukaan PPKMB YUWARAJA 2026',
             'tanggal' => now()->toDateString(),
             'jam_mulai' => '07:00:00',
             'jam_selesai' => '09:00:00',

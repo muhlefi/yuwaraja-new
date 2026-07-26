@@ -1,19 +1,8 @@
 {
-    "name": "YUWARAJA XVII - PKKMB 2025",
-    "short_name": "YUWARAJA XVII",
+    "name": "[logo] - YUWARAJA XVII - PKKMB 2026",
+    "short_name": "[logo] YUWARAJA XVII",
     "description": "Sistem Informasi PKKMB YUWARAJA XVII Universitas Brawijaya",
-    "icons": [
-        {
-            "src": "images/logo-yuwarajaxvii.svg",
-            "sizes": "any",
-            "type": "image/svg+xml"
-        },
-        {
-            "src": "favicon.ico",
-            "sizes": "16x16 32x32 48x48",
-            "type": "image/x-icon"
-        }
-    ],
+    "icons": [],
     "theme_color": "#1f2937",
     "background_color": "#ffffff",
     "display": "standalone",

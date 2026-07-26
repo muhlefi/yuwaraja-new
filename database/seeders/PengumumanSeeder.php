@@ -11,15 +11,15 @@ class PengumumanSeeder extends Seeder
     {
         $pengumuman = [
             [
-                'judul' => 'Selamat Datang di PPKMB YUWARAJA 2025!',
-                'konten' => "Kepada seluruh mahasiswa baru Fakultas Vokasi Universitas Brawijaya,\n\nSelamat datang di PPKMB YUWARAJA 2025! Kami sangat antusias menyambut kalian sebagai bagian dari keluarga besar Fakultas Vokasi.\n\nBeberapa informasi penting:\n1. PPKMB akan berlangsung selama 5 hari\n2. Wajib hadir tepat waktu setiap harinya\n3. Gunakan atribut yang sudah ditentukan\n4. Jaga selalu kesehatan dan stamina\n\nSemoga PPKMB ini menjadi awal yang baik untuk perjalanan akademik kalian!",
+                'judul' => 'Selamat Datang di PPKMB YUWARAJA 2026!',
+                'konten' => "Kepada seluruh mahasiswa baru Fakultas Vokasi Universitas Brawijaya,\n\nSelamat datang di PPKMB YUWARAJA 2026! Kami sangat antusias menyambut kalian sebagai bagian dari keluarga besar Fakultas Vokasi.\n\nBeberapa informasi penting:\n1. PPKMB akan berlangsung selama 5 hari\n2. Wajib hadir tepat waktu setiap harinya\n3. Gunakan atribut yang sudah ditentukan\n4. Jaga selalu kesehatan dan stamina\n\nSemoga PPKMB ini menjadi awal yang baik untuk perjalanan akademik kalian!",
                 'tipe' => 'umum',
                 'is_published' => true,
                 'published_at' => now()->subDays(5),
             ],
             [
-                'judul' => 'Jadwal Lengkap PPKMB YUWARAJA 2025',
-                'konten' => "Berikut jadwal lengkap PPKMB YUWARAJA 2025:\n\nHari 1 (Senin): Upacara Pembukaan & Orientasi Kampus\nHari 2 (Selasa): Pelatihan Kepemimpinan & Team Building\nHari 3 (Rabu): Seminar Akademik & Pengenalan Program Studi\nHari 4 (Kamis): Workshop Kreativitas & Inovasi\nHari 5 (Jumat): Upacara Penutupan & Evaluasi\n\nSetiap hari dimulai pukul 07.00 WIB. Jangan lupa sarapan dan bawa bekal yang cukup!",
+                'judul' => 'Jadwal Lengkap PPKMB YUWARAJA 2026',
+                'konten' => "Berikut jadwal lengkap PPKMB YUWARAJA 2026:\n\nHari 1 (Senin): Upacara Pembukaan & Orientasi Kampus\nHari 2 (Selasa): Pelatihan Kepemimpinan & Team Building\nHari 3 (Rabu): Seminar Akademik & Pengenalan Program Studi\nHari 4 (Kamis): Workshop Kreativitas & Inovasi\nHari 5 (Jumat): Upacara Penutupan & Evaluasi\n\nSetiap hari dimulai pukul 07.00 WIB. Jangan lupa sarapan dan bawa bekal yang cukup!",
                 'tipe' => 'penting',
                 'is_published' => true,
                 'published_at' => now()->subDays(4),

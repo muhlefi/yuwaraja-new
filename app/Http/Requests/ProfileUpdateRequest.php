@@ -32,7 +32,7 @@ class ProfileUpdateRequest extends FormRequest
                 'max:32',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
-            'angkatan' => ['nullable', 'string', 'in:2023,2024,2025'],
+            'angkatan' => ['nullable', 'string', 'in:2023,2024,2025,2026'],
             'nomor_telepon' => ['nullable', 'string', 'max:20'],
             'tempat_lahir' => ['nullable', 'string', 'max:100'],
             'tanggal_lahir' => ['nullable', 'date'],

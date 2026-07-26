@@ -314,9 +314,9 @@
                 
                 <div class="text-center mb-8 opacity-0" style="animation: float-in 1s forwards 0.5s;">
                     <a href="/">
-                        <img src="{{ asset('images/logo.svg') }}" alt="Logo Yuwaraaja" class="mx-auto mb-4 w-24 h-24">
+                        <div class="mx-auto mb-4 w-24 h-24 flex items-center justify-center text-cyan-400 font-bold text-2xl">[logo]</div>
                         <h1 class="text-3xl md:text-4xl font-orbitron font-black uppercase text-white">
-                            YUWARAJA <span class="text-cyan-400">2025</span>
+                            YUWARAJA <span class="text-cyan-400">2026</span>
                         </h1>
                         <p class="text-yellow-400 text-sm tracking-[0.3em]">PKKMB VOKASI UB</p>
                     </a>

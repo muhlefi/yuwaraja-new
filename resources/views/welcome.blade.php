@@ -773,7 +773,7 @@
                         YUWARAJA
                         <span class="block text-[#E8AA1F] text-glow-yellow"></span>
                         <span class="block text-[#E8AA1F] text-glow-yellow">
-                            XVII - 2025
+                            XVII - 2026
                         </span>
                     </h2>
 
@@ -1088,7 +1088,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
 
                     <div class="lg:col-span-5 flex justify-center">
-                        <img src="/images/logo-yuwarajaxvii.svg" alt="logo yuwaraja"
+                        <div class="text-2xl font-bold text-gray-400">[logo]</div>
                             class="w-64 md:w-72 lg:w-full max-w-sm reveal-up">
                     </div>
 
@@ -1233,7 +1233,7 @@
                     </a>
 
                     <p class="mt-4 text-xs text-gray-400">
-                        ©Copyright 2025, IT Division & Operation Yuwaraja
+                        ©Copyright 2026, IT Division & Operation Yuwaraja
                     </p>
                 </div>
             </div>

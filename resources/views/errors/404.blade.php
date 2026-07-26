@@ -113,7 +113,7 @@
         
         <!-- Logo -->
         <div class="mt-8 flex justify-center">
-            <img src="{{ asset('images/logo-yuwarajaxvii.svg') }}" 
+            <div class="text-2xl font-bold text-gray-400">[logo]</div>
                  alt="YUWARAJA XVII" 
                  class="h-16 w-auto opacity-50">
         </div>

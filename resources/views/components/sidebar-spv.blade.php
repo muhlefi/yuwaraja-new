@@ -25,16 +25,16 @@
 
     <!-- Sidebar -->
     <aside :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}"
-        class="fixed top-0 left-0 z-40 w-72 h-screen transition-transform lg:translate-x-0 bg-[#0A0F1A] border-r border-cyan-400/20">
+        class="fixed top-0 left-0 z-40 w-72 h-screen transition-transform lg:translate-x-0 bg-[#0A0F1A] border-r border-cyan-400/20 flex flex-col">
 
         <!-- Logo & Title -->
-        <a href="{{route('spv.dashboard')}}" class="flex flex-col items-center justify-center h-36 px-4 bg-black/30 border-b border-cyan-400/20">
-            <img src="{{ asset('images/logo.svg') }}" alt="Logo" class="h-16 mb-2">
+        <a href="{{route('spv.dashboard')}}" class="flex flex-col items-center justify-center h-36 px-4 bg-black/30 border-b border-cyan-400/20 shrink-0">
+            <div class="h-16 mb-2 flex items-center justify-center text-cyan-400 font-bold text-2xl">[logo]</div>
             <h1 class="text-lg font-bold text-white font-orbitron">YUWARAJA XVII</h1>
         </a>
 
-        <!-- Navigation -->
-        <nav class="p-7 space-y-1.5">
+        <!-- Navigation (scrollable) -->
+        <nav class="flex-1 p-7 space-y-1.5 overflow-y-auto">
             {{-- Menu Dashboard --}}
             <x-sidebar.nav-link :href="route('spv.dashboard')" :active="request()->routeIs('spv.dashboard')">
                 <x-slot name="icon">
@@ -97,8 +97,8 @@
             </x-sidebar.nav-link>
         </nav>
 
-        <!-- User Profile Section -->
-        <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-cyan-400/20 bg-black/20">
+        <!-- User Profile Section (fixed bottom, shrink-0) -->
+        <div class="shrink-0 p-6 border-t border-cyan-400/20 bg-black/20">
             {{-- Kelompok Info untuk SPV --}}
             @php
                 $kelompokDibimbing = \App\Models\Kelompok::where('spv_id', Auth::id())->first();

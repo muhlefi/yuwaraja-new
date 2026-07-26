@@ -13,7 +13,7 @@ class SurveySeeder extends Seeder
     {
         // Survey 1: Kepuasan PKKMB
         $survey1 = MasterSurvey::create([
-            'judul_survey' => 'Survey Kepuasan PPKMB YUWARAJA 2025',
+            'judul_survey' => 'Survey Kepuasan PPKMB YUWARAJA 2026',
             'deskripsi_survey' => 'Survey ini bertujuan untuk mengukur tingkat kepuasan peserta terhadap kegiatan PKKMB yang telah dilaksanakan. Hasil survey akan digunakan untuk perbaikan di tahun berikutnya.',
             'status' => 'aktif',
             'tanggal_mulai' => now()->subDays(2),
@@ -24,7 +24,7 @@ class SurveySeeder extends Seeder
         // Pertanyaan-pertanyaan
         $q1 = DetilSurvey::create([
             'id_master_survey' => $survey1->id_master_survey,
-            'pertanyaan' => 'Bagaimana penilaian Anda terhadap keseluruhan kegiatan PPKMB YUWARAJA 2025?',
+            'pertanyaan' => 'Bagaimana penilaian Anda terhadap keseluruhan kegiatan PPKMB YUWARAJA 2026?',
             'tipe_pertanyaan' => 'radio',
             'opsi_jawaban' => ['Sangat Baik', 'Baik', 'Cukup', 'Kurang', 'Sangat Kurang'],
             'wajib_diisi' => true,

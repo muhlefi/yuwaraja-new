@@ -12,7 +12,7 @@ class JadwalSeeder extends Seeder
         $jadwal = [
             [
                 'nama_acara' => 'Upacara Pembukaan PPKMB',
-                'deskripsi' => 'Upacara resmi pembukaan PPKMB YUWARAJA 2025. Seluruh peserta wajib hadir dan mengenakan atribut lengkap.',
+                'deskripsi' => 'Upacara resmi pembukaan PPKMB YUWARAJA 2026. Seluruh peserta wajib hadir dan mengenakan atribut lengkap.',
                 'tanggal_mulai' => now()->startOfDay()->addHours(7),
                 'tanggal_selesai' => now()->startOfDay()->addHours(9),
                 'lokasi' => 'Gedung Aula Utama UB',

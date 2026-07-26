@@ -64,6 +64,7 @@
                         <option value="2023" {{ old('angkatan') == '2023' ? 'selected' : '' }}>2023</option>
                         <option value="2024" {{ old('angkatan') == '2024' ? 'selected' : '' }}>2024</option>
                         <option value="2025" {{ old('angkatan') == '2025' ? 'selected' : '' }}>2025</option>
+                        <option value="2026" {{ old('angkatan') == '2026' ? 'selected' : '' }}>2026</option>
                     </select>
                     <x-input-error :messages="$errors->get('angkatan')" class="mt-2 text-yellow-400 text-xs" />
                 </div>
