@@ -1,0 +1,167 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
+
+class SpvProfileController extends Controller
+{
+    /**
+     * Display the SPV's profile form.
+     */
+    public function edit(Request $request): View
+    {
+        return view('spv.profile.edit', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
+     * Update the SPV's profile information.
+     */
+    public function update(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $user = $request->user();
+        $data = $request->validated();
+
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            \Log::info('Photo upload started for SPV user: ' . $user->id);
+
+            // Delete old photo if exists
+            if ($user->photo) {
+                $oldPhotoPath = public_path('profile-pictures/' . $user->photo);
+                if (file_exists($oldPhotoPath)) {
+                    unlink($oldPhotoPath);
+                    \Log::info('Deleting old photo: ' . $user->photo);
+                }
+            }
+
+            $photo = $request->file('photo');
+            $filename = 'spv_profile_' . $user->id . '_' . time() . '.' . $photo->getClientOriginalExtension();
+            \Log::info('Generated filename: ' . $filename);
+
+            // Create directory if it doesn't exist
+            $uploadPath = public_path('profile-pictures');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+                \Log::info('Created directory: ' . $uploadPath);
+            }
+
+            // Store the new photo using move() method
+            try {
+                $photo->move($uploadPath, $filename);
+                \Log::info('Photo moved to: ' . $uploadPath . '/' . $filename);
+
+                // Check if file actually exists
+                $fullPath = $uploadPath . '/' . $filename;
+                \Log::info('Full path: ' . $fullPath);
+                \Log::info('File exists after move: ' . (file_exists($fullPath) ? 'true' : 'false'));
+
+                if (file_exists($fullPath)) {
+                    \Log::info('File size after move: ' . filesize($fullPath));
+                }
+            } catch (\Exception $e) {
+                \Log::error('Error moving file: ' . $e->getMessage());
+                throw $e;
+            }
+
+            // Update the photo field in the user data
+            $data['photo'] = $filename;
+            \Log::info('Photo upload completed successfully for SPV');
+        }
+
+        // Fill user data with validated data
+        $user->fill($data);
+
+        // If email is changed, mark it as unverified
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        // Save changes - handle database connection issues gracefully
+        try {
+            $user->save();
+            \Log::info('SPV profile updated successfully for user: ' . $user->id);
+            
+            // If photo was uploaded, redirect to crop page
+            if ($request->hasFile('photo')) {
+                return redirect()->route('profile.crop-photo')->with('status', 'photo-uploaded');
+            }
+
+            return Redirect::route('spv.profile.edit')->with('status', 'profile-updated');
+        } catch (\Exception $dbException) {
+            \Log::error('Database error while saving SPV profile: ' . $dbException->getMessage());
+            
+            // If photo was uploaded, still redirect to crop page even if database save failed
+            if ($request->hasFile('photo')) {
+                return redirect()->route('profile.crop-photo')->with('status', 'photo-uploaded')->with('warning', 'Foto berhasil diupload, namun ada masalah dengan database. Silakan hubungi administrator.');
+            }
+            
+            return Redirect::route('spv.profile.edit')->with('error', 'Terjadi masalah dengan database. Silakan coba lagi atau hubungi administrator.');
+        }
+    }
+
+    /**
+     * Upload profile photo via AJAX for SPV.
+     */
+    public function uploadPhoto(Request $request)
+    {
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB max
+        ]);
+
+        try {
+            $user = $request->user();
+            
+            // Delete old photo if exists
+            if ($user->photo) {
+                $oldPhotoPath = public_path('profile-pictures/' . $user->photo);
+                if (file_exists($oldPhotoPath)) {
+                    unlink($oldPhotoPath);
+                }
+            }
+
+            $photo = $request->file('photo');
+            $filename = 'spv_profile_' . $user->id . '_' . time() . '.' . $photo->getClientOriginalExtension();
+
+            // Create directory if it doesn't exist
+            $uploadPath = public_path('profile-pictures');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+
+            // Store the new photo
+            $photo->move($uploadPath, $filename);
+
+            // Try to update user photo in database, but don't fail if database is unavailable
+            try {
+                $user->photo = $filename;
+                $user->save();
+                \Log::info('SPV photo filename saved to database for user: ' . $user->id);
+            } catch (\Exception $dbException) {
+                \Log::warning('Could not save SPV photo filename to database (database unavailable), but photo file uploaded successfully: ' . $dbException->getMessage());
+                // Continue execution - photo is uploaded even if database update fails
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto profile berhasil diupload!',
+                'photo_url' => asset('profile-pictures/' . $filename)
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Error uploading SPV profile photo: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengupload foto profile. Silakan coba lagi.'
+            ], 500);
+        }
+    }
+}
