@@ -95,6 +95,7 @@ Route::middleware(['auth', 'verified', 'role:spv'])->prefix('spv')->name('spv.')
         Route::get('/{absensi}', 'show')->name('show');
         Route::patch('/{absensiMahasiswa}/approve', 'approve')->name('approve');
         Route::patch('/{absensiMahasiswa}/reject', 'reject')->name('reject');
+        Route::patch('/link-drive/{kelompok}', 'updateLinkDrive')->name('link-drive.update');
     });
     
     // Profile Routes untuk SPV

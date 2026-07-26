@@ -11,34 +11,81 @@ use Carbon\Carbon;
 
 class SpvAbsensiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         
-        // Ambil semua absensi yang aktif
+        // Ambil kelompok yang dibimbing SPV ini
+        $kelompokDibimbing = $user->kelompokDibimbing;
+        $kelompokIds = $kelompokDibimbing->pluck('id');
+        $mahasiswaIds = User::whereIn('kelompok_id', $kelompokIds)->pluck('id');
+
+        // Filter parameters
+        $search = $request->get('search', '');
+        $statusFilter = $request->get('status', 'all');
+        $kelompokFilter = $request->get('kelompok', '');
+        $tanggalDari = $request->get('tanggal_dari', '');
+        $tanggalSampai = $request->get('tanggal_sampai', '');
+
+        // Query semua absensi mahasiswa dari kelompok yang dibimbing
+        $query = AbsensiMahasiswa::with(['absensi', 'mahasiswa', 'mahasiswa.kelompok', 'approvedBy'])
+            ->whereIn('user_id', $mahasiswaIds);
+
+        // Filter berdasarkan status
+        if ($statusFilter !== 'all') {
+            $query->where('status', $statusFilter);
+        }
+
+        // Filter berdasarkan pencarian nama
+        if ($search) {
+            $query->whereHas('mahasiswa', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('nim', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter berdasarkan kelompok
+        if ($kelompokFilter) {
+            $query->whereHas('mahasiswa', function ($q) use ($kelompokFilter) {
+                $q->where('kelompok_id', $kelompokFilter);
+            });
+        }
+
+        // Filter berdasarkan rentang tanggal
+        if ($tanggalDari) {
+            $query->where('created_at', '>=', $tanggalDari);
+        }
+        if ($tanggalSampai) {
+            $query->where('created_at', '<=', $tanggalSampai . ' 23:59:59');
+        }
+
+        // Ambil semua data dengan filter
+        $allRequests = $query->orderBy('created_at', 'desc')->get();
+
+        // Pisahkan berdasarkan status
+        $pendingRequests = $allRequests->where('status', 'pending');
+        $approvedRequests = $allRequests->where('status', 'approved')->take(20);
+
+        // Ambil semua absensi aktif
         $absensiList = Absensi::where('status', 'aktif')
             ->orderBy('tanggal', 'desc')
             ->orderBy('jam_mulai', 'desc')
             ->get();
 
-        // Ambil request absensi dari mahasiswa yang dibimbing SPV ini
-        $kelompokIds = $user->kelompokDibimbing->pluck('id');
-        $mahasiswaIds = User::whereIn('kelompok_id', $kelompokIds)->pluck('id');
-        
-        $pendingRequests = AbsensiMahasiswa::with(['absensi', 'mahasiswa', 'mahasiswa.kelompok'])
-            ->whereIn('user_id', $mahasiswaIds)
-            ->where('status', 'pending')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        // Data untuk filter dropdown
+        $kelompokList = $kelompokDibimbing;
 
-        $approvedRequests = AbsensiMahasiswa::with(['absensi', 'mahasiswa', 'mahasiswa.kelompok'])
-            ->whereIn('user_id', $mahasiswaIds)
-            ->where('status', 'approved')
-            ->orderBy('approved_at', 'desc')
-            ->take(20)
-            ->get();
-
-        return view('spv.absensi.index', compact('absensiList', 'pendingRequests', 'approvedRequests'));
+        return view('spv.absensi.index', compact(
+            'absensiList', 
+            'pendingRequests', 
+            'approvedRequests', 
+            'kelompokList',
+            'search', 
+            'statusFilter', 
+            'kelompokFilter', 
+            'tanggalDari', 
+            'tanggalSampai'
+        ));
     }
 
     public function approve(Request $request, AbsensiMahasiswa $absensiMahasiswa)
@@ -130,5 +177,23 @@ class SpvAbsensiController extends Controller
             'pendingCount', 
             'rejectedCount'
         ));
+    }
+
+    public function updateLinkDrive(Request $request, $kelompokId)
+    {
+        $user = Auth::user();
+        
+        // Pastikan kelompok ini dibimbing oleh SPV yang sedang login
+        $kelompok = \App\Models\Kelompok::where('spv_id', $user->id)->findOrFail($kelompokId);
+        
+        $validated = $request->validate([
+            'link_drive' => 'nullable|url|max:500',
+        ]);
+        
+        $kelompok->update([
+            'link_drive' => $validated['link_drive'] ?: null,
+        ]);
+        
+        return redirect()->back()->with('success', 'Link drive absensi berhasil diperbarui.');
     }
 }

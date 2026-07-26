@@ -151,6 +151,72 @@
                 </div>
             </div>
         </div>
+
+        <!-- Hasil Penilaian SPV Section -->
+        @php
+            $hasilPenilaian = \App\Models\PengumpulanTugas::with(['user', 'tugas', 'kelompok'])
+                ->where('status', 'done')
+                ->whereHas('tugas', function ($q) {
+                    $q->where('deadline', '<', now());
+                })
+                ->whereNotNull('nilai')
+                ->latest('updated_at')
+                ->take(10)
+                ->get();
+        @endphp
+
+        @if($hasilPenilaian->count() > 0)
+        <div class="col-span-full">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-white">Hasil Penilaian SPV</h2>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">Tugas yang sudah lewat deadline</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead class="bg-gray-50 dark:bg-gray-700">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tugas</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Mahasiswa</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Cluster</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nilai</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Feedback</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                @foreach($hasilPenilaian as $item)
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $item->tugas->judul ?? 'Tugas Dihapus' }}</div>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">{{ $item->tugas->deadline->format('d M Y') ?? '-' }}</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900 dark:text-white">{{ $item->user->name ?? 'User Dihapus' }}</div>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">{{ $item->user->nim ?? '-' }}</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900 dark:text-white">{{ $item->kelompok->nama_kelompok ?? '-' }}</div>
+                                    </td>
+                                    <td class="px-4 py-3 whitespace-nowrap">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                            {{ $item->nilai }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <div class="text-sm text-gray-600 dark:text-gray-400 max-w-xs truncate" title="{{ $item->feedback ?? '-' }}">
+                                            {{ $item->feedback ?? '-' }}
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 
     <script>

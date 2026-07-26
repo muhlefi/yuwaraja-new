@@ -19,6 +19,7 @@ class Kelompok extends Model
         'spv_id',
         'code',
         'photo',
+        'link_drive',
     ];
 
     protected static function booted()

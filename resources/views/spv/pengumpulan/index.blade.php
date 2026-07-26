@@ -46,6 +46,94 @@
             </div>
         </header>
 
+        <!-- Filter Section -->
+        <div class="bg-gray-800/60 border border-gray-700 rounded-xl p-6 mb-8 scroll-reveal">
+            <div class="flex items-center mb-4 gap-3">
+                <div class="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg p-2">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-poppins text-lg font-semibold text-white">Filter Data</h3>
+            </div>
+            <form method="GET" action="{{ route('spv.pengumpulan.index') }}" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Pencarian Nama -->
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Cari Nama / NIM</label>
+                        <input type="text" name="search" value="{{ $search }}" 
+                            class="w-full bg-gray-700/60 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm placeholder-gray-400 focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50" 
+                            placeholder="Cari nama atau NIM...">
+                    </div>
+
+                    <!-- Filter Status -->
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Status</label>
+                        <select name="status" class="w-full bg-gray-700/60 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50">
+                            <option value="all" {{ $statusFilter === 'all' ? 'selected' : '' }}>Semua Status</option>
+                            <option value="submitted" {{ $statusFilter === 'submitted' ? 'selected' : '' }}>Submitted</option>
+                            <option value="reviewed" {{ $statusFilter === 'reviewed' ? 'selected' : '' }}>Reviewed</option>
+                            <option value="approved" {{ $statusFilter === 'approved' ? 'selected' : '' }}>Approved</option>
+                            <option value="done" {{ $statusFilter === 'done' ? 'selected' : '' }}>Done</option>
+                            <option value="rejected" {{ $statusFilter === 'rejected' ? 'selected' : '' }}>Rejected</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Tugas -->
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Tugas</label>
+                        <select name="tugas_id" class="w-full bg-gray-700/60 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50">
+                            <option value="">Semua Tugas</option>
+                            @foreach($tugasList as $tugas)
+                            <option value="{{ $tugas->id }}" {{ $tugasFilter == $tugas->id ? 'selected' : '' }}>{{ $tugas->judul }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Filter Kelompok -->
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Cluster</label>
+                        <select name="kelompok" class="w-full bg-gray-700/60 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50">
+                            <option value="">Semua Cluster</option>
+                            @foreach($kelompokList as $kelompok)
+                            <option value="{{ $kelompok->id }}" {{ $kelompokFilter == $kelompok->id ? 'selected' : '' }}>{{ $kelompok->nama_kelompok }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Tanggal Dari -->
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Tanggal Dari</label>
+                        <input type="date" name="tanggal_dari" value="{{ $tanggalDari }}" 
+                            class="w-full bg-gray-700/60 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50">
+                    </div>
+
+                    <!-- Tanggal Sampai -->
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Tanggal Sampai</label>
+                        <input type="date" name="tanggal_sampai" value="{{ $tanggalSampai }}" 
+                            class="w-full bg-gray-700/60 border border-gray-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/50">
+                    </div>
+
+                    <div class="flex items-end gap-2 lg:col-span-2">
+                        <button type="submit" class="flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold bg-gradient-to-br from-cyan-500 to-blue-500 text-white shadow-lg transition-all hover:from-cyan-600 hover:to-blue-600">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            Filter
+                        </button>
+                        <a href="{{ route('spv.pengumpulan.index') }}" class="flex items-center gap-2 px-5 py-2 rounded-lg text-sm font-semibold bg-gray-700 text-gray-300 hover:bg-gray-600 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            Reset
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
         <!-- Daftar Pengumpulan -->
         <div class="space-y-5">
             @forelse($pengumpulans as $index => $pengumpulan)

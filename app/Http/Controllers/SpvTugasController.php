@@ -18,22 +18,76 @@ class SpvTugasController extends Controller
     }
 
     // Daftar pengumpulan tugas mahasiswa
-    public function pengumpulan()
+    public function pengumpulan(Request $request)
     {
         $spv = auth()->user();
         
         // Ambil kelompok yang di-supervisi oleh SPV ini
-        $kelompokIds = \App\Models\Kelompok::where('spv_id', $spv->id)->pluck('id');
+        $kelompokDibimbing = \App\Models\Kelompok::where('spv_id', $spv->id)->get();
+        $kelompokIds = $kelompokDibimbing->pluck('id');
         
-        // Ambil pengumpulan tugas hanya dari mahasiswa di kelompok yang di-supervisi
-        $pengumpulans = PengumpulanTugas::with(['user.kelompok', 'tugas', 'kelompok'])
-            ->whereHas('user', function($query) use ($kelompokIds) {
-                $query->whereIn('kelompok_id', $kelompokIds);
-            })
-            ->latest()
-            ->paginate(10);
+        // Filter parameters
+        $search = $request->get('search', '');
+        $statusFilter = $request->get('status', 'all');
+        $tugasFilter = $request->get('tugas_id', '');
+        $kelompokFilter = $request->get('kelompok', '');
+        $tanggalDari = $request->get('tanggal_dari', '');
+        $tanggalSampai = $request->get('tanggal_sampai', '');
+
+        // Query pengumpulan tugas
+        $query = PengumpulanTugas::with(['user.kelompok', 'tugas', 'kelompok'])
+            ->whereHas('user', function ($q) use ($kelompokIds) {
+                $q->whereIn('kelompok_id', $kelompokIds);
+            });
+
+        // Filter berdasarkan pencarian nama
+        if ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('nim', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter berdasarkan status
+        if ($statusFilter !== 'all') {
+            $query->where('status', $statusFilter);
+        }
+
+        // Filter berdasarkan tugas
+        if ($tugasFilter) {
+            $query->where('tugas_id', $tugasFilter);
+        }
+
+        // Filter berdasarkan kelompok
+        if ($kelompokFilter) {
+            $query->where('kelompok_id', $kelompokFilter);
+        }
+
+        // Filter berdasarkan rentang tanggal
+        if ($tanggalDari) {
+            $query->where('created_at', '>=', $tanggalDari);
+        }
+        if ($tanggalSampai) {
+            $query->where('created_at', '<=', $tanggalSampai . ' 23:59:59');
+        }
+
+        $pengumpulans = $query->latest()->paginate(10)->withQueryString();
             
-        return view('spv.pengumpulan.index', compact('pengumpulans'));
+        // Data untuk filter dropdown
+        $tugasList = \App\Models\Tugas::latest()->get();
+        $kelompokList = $kelompokDibimbing;
+
+        return view('spv.pengumpulan.index', compact(
+            'pengumpulans', 
+            'tugasList', 
+            'kelompokList',
+            'search', 
+            'statusFilter', 
+            'tugasFilter', 
+            'kelompokFilter', 
+            'tanggalDari', 
+            'tanggalSampai'
+        ));
     }
 
     // Detail tugas dan semua pengumpulannya

@@ -70,6 +70,11 @@ class KelompokResource extends Resource
                                 $set('code', strtoupper(\Illuminate\Support\Str::random(5)));
                             })
                     ),
+                Forms\Components\TextInput::make('link_drive')
+                    ->label('Link Drive Absensi')
+                    ->url()
+                    ->placeholder('https://drive.google.com/...')
+                    ->helperText('Link Google Drive untuk upload bukti absensi mahasiswa'),
             ]);
     }
 
@@ -88,6 +93,12 @@ class KelompokResource extends Resource
                     ->copyable()
                     ->copyMessage('Kode disalin!')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('link_drive')
+                    ->label('Link Drive')
+                    ->url(fn ($record) => $record->link_drive)
+                    ->openUrlInNewTab()
+                    ->icon('heroicon-o-link')
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

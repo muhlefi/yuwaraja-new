@@ -1,10 +1,8 @@
-@extends('layouts.spv')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="min-h-screen bg-gray-900 py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Link Drive Section -->
-        @if($kelompokList->count() > 0)
+        <?php if($kelompokList->count() > 0): ?>
         <div class="mb-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 p-6">
             <div class="flex items-center mb-4">
                 <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg p-2 mr-3">
@@ -18,10 +16,10 @@
                 </div>
             </div>
             <div class="space-y-3">
-                @foreach($kelompokList as $kelompok)
-                <form method="POST" action="{{ route('spv.absensi.link-drive.update', $kelompok->id) }}" class="bg-gray-700 border border-gray-600 rounded-lg p-4">
-                    @csrf
-                    @method('PATCH')
+                <?php $__currentLoopData = $kelompokList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelompok): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <form method="POST" action="<?php echo e(route('spv.absensi.link-drive.update', $kelompok->id)); ?>" class="bg-gray-700 border border-gray-600 rounded-lg p-4">
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('PATCH'); ?>
                     <div class="flex items-center gap-3">
                         <div class="flex items-center gap-3 flex-shrink-0">
                             <div class="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg p-2">
@@ -30,12 +28,12 @@
                                 </svg>
                             </div>
                             <div class="min-w-[120px]">
-                                <div class="font-semibold text-white text-sm">{{ $kelompok->nama_kelompok }}</div>
-                                <div class="text-xs text-gray-400">{{ $kelompok->anggota()->count() }} anggota</div>
+                                <div class="font-semibold text-white text-sm"><?php echo e($kelompok->nama_kelompok); ?></div>
+                                <div class="text-xs text-gray-400"><?php echo e($kelompok->anggota()->count()); ?> anggota</div>
                             </div>
                         </div>
                         <div class="flex-1 flex items-center gap-2">
-                            <input type="url" name="link_drive" value="{{ $kelompok->link_drive }}" 
+                            <input type="url" name="link_drive" value="<?php echo e($kelompok->link_drive); ?>" 
                                 class="flex-1 border border-gray-500 bg-gray-600 rounded-lg px-3 py-2 text-white text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
                                 placeholder="https://drive.google.com/...">
                             <button type="submit" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg flex items-center gap-1 flex-shrink-0">
@@ -45,8 +43,8 @@
                                 Simpan
                             </button>
                         </div>
-                        @if($kelompok->link_drive)
-                        <a href="{{ $kelompok->link_drive }}" target="_blank" 
+                        <?php if($kelompok->link_drive): ?>
+                        <a href="<?php echo e($kelompok->link_drive); ?>" target="_blank" 
                             class="text-cyan-400 hover:text-cyan-300 transition-colors flex-shrink-0" title="Buka Link">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
@@ -58,20 +56,20 @@
                             </svg>
                             Tersimpan
                         </span>
-                        @else
+                        <?php else: ?>
                         <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold bg-gray-500/10 text-gray-400 flex-shrink-0">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
                             </svg>
                             Belum Disimpan
                         </span>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </form>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
-        @endif
+        <?php endif; ?>
 
         <!-- Header -->
         <div class="mb-8">
@@ -95,15 +93,15 @@
                     <!-- Stats Cards -->
                     <div class="grid grid-cols-3 gap-4">
                         <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-lg p-4 text-center shadow-lg">
-                            <div class="text-2xl font-bold text-white">{{ $pendingRequests->count() }}</div>
+                            <div class="text-2xl font-bold text-white"><?php echo e($pendingRequests->count()); ?></div>
                             <div class="text-xs text-white font-medium">Pending</div>
                         </div>
                         <div class="bg-gradient-to-r from-teal-500 to-teal-600 rounded-lg p-4 text-center shadow-lg">
-                            <div class="text-2xl font-bold text-white">{{ $absensiList->count() }}</div>
+                            <div class="text-2xl font-bold text-white"><?php echo e($absensiList->count()); ?></div>
                             <div class="text-xs text-white font-medium">Aktif</div>
                         </div>
                         <div class="bg-gradient-to-r from-gray-600 to-gray-700 rounded-lg p-4 text-center shadow-lg">
-                            <div class="text-2xl font-bold text-white">{{ $approvedRequests->count() }}</div>
+                            <div class="text-2xl font-bold text-white"><?php echo e($approvedRequests->count()); ?></div>
                             <div class="text-xs text-white font-medium">Disetujui</div>
                         </div>
                     </div>
@@ -112,27 +110,27 @@
         </div>
 
         <!-- Alert Messages -->
-        @if(session('success'))
+        <?php if(session('success')): ?>
         <div class="mb-6 bg-gradient-to-r from-teal-600 to-teal-700 text-white px-4 py-3 rounded-lg shadow-lg">
             <div class="flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                 </svg>
-                <span class="font-medium">{{ session('success') }}</span>
+                <span class="font-medium"><?php echo e(session('success')); ?></span>
             </div>
         </div>
-        @endif
+        <?php endif; ?>
 
-        @if(session('error'))
+        <?php if(session('error')): ?>
         <div class="mb-6 bg-gradient-to-r from-red-600 to-rose-600 text-white px-4 py-3 rounded-lg shadow-lg">
             <div class="flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                 </svg>
-                <span class="font-medium">{{ session('error') }}</span>
+                <span class="font-medium"><?php echo e(session('error')); ?></span>
             </div>
         </div>
-        @endif
+        <?php endif; ?>
 
         <!-- Filter Section -->
         <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 mb-6 p-6">
@@ -144,12 +142,12 @@
                 </div>
                 <h3 class="text-lg font-semibold text-white">Filter Data</h3>
             </div>
-            <form method="GET" action="{{ route('spv.absensi.index') }}" class="space-y-4">
+            <form method="GET" action="<?php echo e(route('spv.absensi.index')); ?>" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Pencarian Nama -->
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Cari Nama / NIM</label>
-                        <input type="text" name="search" value="{{ $search }}" 
+                        <input type="text" name="search" value="<?php echo e($search); ?>" 
                             class="w-full border border-gray-600 bg-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500" 
                             placeholder="Cari nama atau NIM...">
                     </div>
@@ -158,10 +156,10 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Status</label>
                         <select name="status" class="w-full border border-gray-600 bg-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
-                            <option value="all" {{ $statusFilter === 'all' ? 'selected' : '' }}>Semua Status</option>
-                            <option value="pending" {{ $statusFilter === 'pending' ? 'selected' : '' }}>Pending</option>
-                            <option value="approved" {{ $statusFilter === 'approved' ? 'selected' : '' }}>Disetujui</option>
-                            <option value="rejected" {{ $statusFilter === 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                            <option value="all" <?php echo e($statusFilter === 'all' ? 'selected' : ''); ?>>Semua Status</option>
+                            <option value="pending" <?php echo e($statusFilter === 'pending' ? 'selected' : ''); ?>>Pending</option>
+                            <option value="approved" <?php echo e($statusFilter === 'approved' ? 'selected' : ''); ?>>Disetujui</option>
+                            <option value="rejected" <?php echo e($statusFilter === 'rejected' ? 'selected' : ''); ?>>Ditolak</option>
                         </select>
                     </div>
 
@@ -170,16 +168,16 @@
                         <label class="block text-sm font-medium text-gray-300 mb-1">Cluster</label>
                         <select name="kelompok" class="w-full border border-gray-600 bg-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                             <option value="">Semua Cluster</option>
-                            @foreach($kelompokList as $kelompok)
-                            <option value="{{ $kelompok->id }}" {{ $kelompokFilter == $kelompok->id ? 'selected' : '' }}>{{ $kelompok->nama_kelompok }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $kelompokList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelompok): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($kelompok->id); ?>" <?php echo e($kelompokFilter == $kelompok->id ? 'selected' : ''); ?>><?php echo e($kelompok->nama_kelompok); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
 
                     <!-- Tanggal Dari -->
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Tanggal Dari</label>
-                        <input type="date" name="tanggal_dari" value="{{ $tanggalDari }}" 
+                        <input type="date" name="tanggal_dari" value="<?php echo e($tanggalDari); ?>" 
                             class="w-full border border-gray-600 bg-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                     </div>
                 </div>
@@ -187,7 +185,7 @@
                     <!-- Tanggal Sampai -->
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Tanggal Sampai</label>
-                        <input type="date" name="tanggal_sampai" value="{{ $tanggalSampai }}" 
+                        <input type="date" name="tanggal_sampai" value="<?php echo e($tanggalSampai); ?>" 
                             class="w-full border border-gray-600 bg-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
                     </div>
                     <div class="flex items-end gap-2 lg:col-span-3">
@@ -197,7 +195,7 @@
                             </svg>
                             Filter
                         </button>
-                        <a href="{{ route('spv.absensi.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
+                        <a href="<?php echo e(route('spv.absensi.index')); ?>" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
@@ -209,7 +207,7 @@
         </div>
 
         <!-- Pending Requests Section -->
-        @if($pendingRequests->count() > 0)
+        <?php if($pendingRequests->count() > 0): ?>
         <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 mb-6 lg:mb-8 overflow-hidden">
             <div class="bg-gradient-to-r from-amber-600 to-orange-600 border-b border-gray-700 px-6 py-4">
                 <div class="flex items-center justify-between">
@@ -225,55 +223,55 @@
                         </div>
                     </div>
                     <div class="bg-white bg-opacity-20 px-3 py-1 rounded-full">
-                        <span class="text-sm font-semibold text-white">{{ $pendingRequests->count() }} Permintaan</span>
+                        <span class="text-sm font-semibold text-white"><?php echo e($pendingRequests->count()); ?> Permintaan</span>
                     </div>
                 </div>
             </div>
 
             <div class="p-6">
                 <div class="space-y-4">
-                    @foreach($pendingRequests as $request)
+                    <?php $__currentLoopData = $pendingRequests; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $request): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="bg-gray-700 border border-gray-600 rounded-lg p-4 hover:shadow-md transition-shadow">
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                             <div class="flex items-center mb-3 sm:mb-0">
                                 <div class="flex-shrink-0 mr-4">
-                                    @if($request->mahasiswa->photo)
-                                    <img class="h-12 w-12 rounded-lg object-cover" src="{{ asset('profile-pictures/' . $request->mahasiswa->photo) }}" alt="">
-                                    @else
+                                    <?php if($request->mahasiswa->photo): ?>
+                                    <img class="h-12 w-12 rounded-lg object-cover" src="<?php echo e(asset('profile-pictures/' . $request->mahasiswa->photo)); ?>" alt="">
+                                    <?php else: ?>
                                     <div class="h-12 w-12 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
                                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                         </svg>
                                     </div>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                                 <div>
-                                    <div class="font-semibold text-white">{{ $request->mahasiswa->name }}</div>
-                                    <div class="text-sm text-gray-300">{{ $request->mahasiswa->nim }}</div>
-                                    <div class="text-xs text-amber-400 font-medium">{{ $request->mahasiswa->kelompok->nama_kelompok ?? 'Belum ada Cluster' }}</div>
+                                    <div class="font-semibold text-white"><?php echo e($request->mahasiswa->name); ?></div>
+                                    <div class="text-sm text-gray-300"><?php echo e($request->mahasiswa->nim); ?></div>
+                                    <div class="text-xs text-amber-400 font-medium"><?php echo e($request->mahasiswa->kelompok->nama_kelompok ?? 'Belum ada Cluster'); ?></div>
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3 sm:mb-0 sm:flex-1 sm:mx-6">
                                 <div class="text-sm">
                                     <div class="text-gray-400">Absensi</div>
-                                    <div class="font-medium text-white">{{ $request->absensi->judul }}</div>
+                                    <div class="font-medium text-white"><?php echo e($request->absensi->judul); ?></div>
                                 </div>
                                 <div class="text-sm">
                                     <div class="text-gray-400">Waktu Request</div>
-                                    <div class="font-medium text-white">{{ $request->waktu_absen->format('d M Y, H:i') }}</div>
+                                    <div class="font-medium text-white"><?php echo e($request->waktu_absen->format('d M Y, H:i')); ?></div>
                                 </div>
-                                @if($request->keterangan)
+                                <?php if($request->keterangan): ?>
                                 <div class="text-sm col-span-2">
                                     <div class="text-gray-400">Keterangan</div>
-                                    <div class="font-medium text-gray-300">{{ $request->keterangan }}</div>
+                                    <div class="font-medium text-gray-300"><?php echo e($request->keterangan); ?></div>
                                 </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
 
                             <div class="flex space-x-2">
-                                <form action="{{ route('spv.absensi.approve', $request) }}" method="POST">
-                                    @csrf @method('PATCH')
+                                <form action="<?php echo e(route('spv.absensi.approve', $request)); ?>" method="POST">
+                                    <?php echo csrf_field(); ?> <?php echo method_field('PATCH'); ?>
                                     <button type="submit" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg">
                                         <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -281,7 +279,7 @@
                                         Setujui
                                     </button>
                                 </form>
-                                <button onclick="openRejectModal({{ $request->id }})" class="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg">
+                                <button onclick="openRejectModal(<?php echo e($request->id); ?>)" class="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg">
                                     <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                     </svg>
@@ -290,11 +288,11 @@
                             </div>
                         </div>
                     </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
         </div>
-        @endif
+        <?php endif; ?>
 
         <!-- Active Sessions Section -->
         <div class="mb-8">
@@ -312,9 +310,9 @@
                     </div>
                 </div>
 
-                @if($absensiList->count() > 0)
+                <?php if($absensiList->count() > 0): ?>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @foreach($absensiList as $absensi)
+                    <?php $__currentLoopData = $absensiList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $absensi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="bg-gray-700 border border-gray-600 rounded-lg p-6 hover:shadow-lg transition-shadow">
                         <div class="flex items-center justify-between mb-4">
                             <!-- <div class="bg-gradient-to-r from-emerald-500 to-green-600 rounded-lg p-2">
@@ -322,54 +320,54 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
                                 </svg>
                             </div> -->
-                            @php
+                            <?php
                                 $now = now();
                                 $absensiStart = \Carbon\Carbon::parse($absensi->tanggal->format('Y-m-d') . ' ' . $absensi->jam_mulai);
                                 $absensiEnd = \Carbon\Carbon::parse($absensi->tanggal->format('Y-m-d') . ' ' . $absensi->jam_selesai);
-                            @endphp
+                            ?>
                             
-                            @if($now < $absensiStart)
+                            <?php if($now < $absensiStart): ?>
                                 <span class="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1">
                                     <div class="w-2 h-2 bg-white rounded-full"></div>
                                     Akan Datang
                                 </span>
-                            @elseif($now >= $absensiStart && $now <= $absensiEnd)
+                            <?php elseif($now >= $absensiStart && $now <= $absensiEnd): ?>
                                 <span class="bg-gradient-to-r from-emerald-500 to-green-600 text-white text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1">
                                     <div class="w-2 h-2 bg-white rounded-full animate-pulse"></div>
                                     Aktif
                                 </span>
-                            @else
+                            <?php else: ?>
                                 <span class="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-medium px-3 py-1 rounded-full flex items-center gap-1">
                                     <div class="w-2 h-2 bg-white rounded-full"></div>
                                     Berakhir
                                 </span>
-                            @endif
+                            <?php endif; ?>
                         </div>
 
-                        <h3 class="text-lg font-semibold text-white mb-3">{{ $absensi->judul }}</h3>
+                        <h3 class="text-lg font-semibold text-white mb-3"><?php echo e($absensi->judul); ?></h3>
 
                         <div class="space-y-2 mb-4">
                             <div class="flex items-center text-sm text-gray-300">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                 </svg>
-                                <span>{{ $absensi->tanggal->format('d M Y') }}</span>
+                                <span><?php echo e($absensi->tanggal->format('d M Y')); ?></span>
                             </div>
                             <div class="flex items-center text-sm text-gray-300">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                <span>{{ $absensi->jam_mulai_formatted }} - {{ $absensi->jam_selesai_formatted }}</span>
+                                <span><?php echo e($absensi->jam_mulai_formatted); ?> - <?php echo e($absensi->jam_selesai_formatted); ?></span>
                             </div>
                             <div class="flex items-center text-sm text-gray-300">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                 </svg>
-                                <span>{{ $absensi->absensiMahasiswa()->count() }} permintaan</span>
+                                <span><?php echo e($absensi->absensiMahasiswa()->count()); ?> permintaan</span>
                             </div>
                         </div>
 
-                        <a href="{{ route('spv.absensi.show', $absensi) }}" class="block w-full bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-medium py-2 px-4 rounded-lg transition-colors text-center text-sm shadow-lg">
+                        <a href="<?php echo e(route('spv.absensi.show', $absensi)); ?>" class="block w-full bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white font-medium py-2 px-4 rounded-lg transition-colors text-center text-sm shadow-lg">
                             <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -377,9 +375,9 @@
                             Lihat Detail
                         </a>
                     </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
-                @else
+                <?php else: ?>
                 <div class="text-center py-12">
                     <div class="bg-gray-700 rounded-full p-6 w-20 h-20 mx-auto mb-4 flex items-center justify-center">
                         <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -389,12 +387,12 @@
                     <h3 class="text-lg font-semibold text-white mb-2">Tidak Ada Sesi Aktif</h3>
                     <p class="text-gray-300">Belum ada sesi absensi yang sedang berlangsung</p>
                 </div>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
 
         <!-- Approved Requests Section -->
-        @if($approvedRequests->count() > 0)
+        <?php if($approvedRequests->count() > 0): ?>
         <div class="mb-8">
             <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 p-6">
                 <div class="flex items-center mb-6">
@@ -420,33 +418,34 @@
                             </tr>
                         </thead>
                         <tbody class="bg-gray-800 divide-y divide-gray-600">
-                            @foreach($approvedRequests as $request)
+                            <?php $__currentLoopData = $approvedRequests; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $request): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr class="hover:bg-gray-700">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-10 w-10">
-                                            @if($request->mahasiswa->photo)
-                                            <img class="h-10 w-10 rounded-lg object-cover" src="{{ asset('profile-pictures/' . $request->mahasiswa->photo) }}" alt="">
-                                            @else
+                                            <?php if($request->mahasiswa->photo): ?>
+                                            <img class="h-10 w-10 rounded-lg object-cover" src="<?php echo e(asset('profile-pictures/' . $request->mahasiswa->photo)); ?>" alt="">
+                                            <?php else: ?>
                                             <div class="h-10 w-10 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
                                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                                 </svg>
                                             </div>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                         <div class="ml-4">
-                                            <div class="text-sm font-medium text-white">{{ $request->mahasiswa->name }}</div>
-                                            <div class="text-sm text-gray-300">{{ $request->mahasiswa->nim }}</div>
+                                            <div class="text-sm font-medium text-white"><?php echo e($request->mahasiswa->name); ?></div>
+                                            <div class="text-sm text-gray-300"><?php echo e($request->mahasiswa->nim); ?></div>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm text-white">{{ $request->absensi->judul }}</div>
-                                    <div class="text-sm text-gray-300">{{ $request->absensi->tanggal->format('d M Y') }}</div>
+                                    <div class="text-sm text-white"><?php echo e($request->absensi->judul); ?></div>
+                                    <div class="text-sm text-gray-300"><?php echo e($request->absensi->tanggal->format('d M Y')); ?></div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                    {{ $request->waktu_absen->format('d M Y, H:i') }}
+                                    <?php echo e($request->waktu_absen->format('d M Y, H:i')); ?>
+
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white">
@@ -454,13 +453,13 @@
                                     </span>
                                 </td>
                             </tr>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        @else
+        <?php else: ?>
         <div class="mb-8">
             <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 p-6">
                 <div class="flex items-center mb-6">
@@ -486,7 +485,7 @@
                 </div>
             </div>
         </div>
-        @endif
+        <?php endif; ?>
     </div>
 </div>
 
@@ -506,8 +505,8 @@
         </div>
 
         <form id="rejectForm" method="POST">
-            @csrf
-            @method('PATCH')
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PATCH'); ?>
             <div class="mb-4">
                 <label for="alasan_penolakan" class="block text-sm font-medium text-gray-300 mb-2">Alasan Penolakan</label>
                 <textarea id="alasan_penolakan" name="alasan_penolakan" rows="4" class="w-full border border-gray-600 bg-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="Masukkan alasan penolakan..." required></textarea>
@@ -536,4 +535,5 @@
         document.getElementById('rejectModal').classList.add('hidden');
     }
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.spv', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\LefiArchive\Tugas\kuliah\hima-bem\yuwaraja-new\resources\views/spv/absensi/index.blade.php ENDPATH**/ ?>
